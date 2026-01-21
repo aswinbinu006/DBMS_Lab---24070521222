@@ -1,0 +1,31 @@
+1. Create a table st_info with attributes prn, name, m1, m2, m3;
+	create table st_info(prn int, name varchar2(20), m1 number, m2 number, m3 number);
+
+	select * from tab; 		# To know about how many tables are there 
+
+	select * from st_info;		# To check the information is present in the table or view the data in the table
+
+2. insert at least 10 rows in the table 
+	insert into st_info (prn, name,m1,m2,m3) values (101,'Aswin',40,40,40);
+	insert into st_info (prn, name,m1,m2,m3) values (102,'Raj',50,60,50);
+	insert into st_info (prn, name,m1,m2,m3) values (103,'Ram',10,20,30);
+	insert into st_info (prn, name,m1,m2,m3) values (104,'Sam',25,50,40);
+	insert into st_info (prn, name,m1,m2,m3) values (105,'Charles',07,25,37);
+	insert into st_info (prn, name,m1,m2,m3) values (106,'Jab',15,29,28);
+	insert into st_info (prn, name,m1,m2,m3) values (107,'Beth',19,23,36);
+	insert into st_info (prn, name,m1,m2,m3) values (108,'Beck',40,12,24);
+	insert into st_info (prn, name,m1,m2,m3) values (109,'King',40,40,40);
+	insert into st_info (prn, name,m1,m2,m3) values (110,'Charlie',50,50,50);
+
+	set linesize 150	 	# To get reduce the spacing in the tables
+
+
+3. add attribute
+	alter table st_info add total number;
+	alter table st_info add perc number;
+
+
+4. calculate total & perc
+	update st_info set total = m1 + m2 + m3;
+	update st_info set perc = (total/300)*100;
+
