@@ -1,0 +1,96 @@
+alter table department modify name varchar2(30);
+
+alter table department modify building varchar2(30);
+
+alter table department modify building varchar2(30) not null;
+
+desc department;
+
+How to rename the field name ?
+alter table tablename rename field to nowfield;
+
+
+select * from department;
+
+select * from instructor;
+
+
+Increase the salary of each instructor in the Comp. Sci. department by 10%
+-> UPDATE instructor set salary = salary + salary * .1 where DEPT_ID = (select DEPT_ID from department where name = "Computer Science"); 
+   UPDATE instructor set salary = salary + salary * .1 where DEPT_ID = 1; 
+
+
+UPDATE instructor set salary = salary + salary * .2 where DEPT_ID = (select DEPT_ID from department where name = 'History')
+-> 0 rows updated.
+
+update instructor set salary = salry + salary * 5/100 where salary < 80000;
+
+condition is salary is above 80000 but below 85000 deduce 5%
+-> update instructor set salary = salary - salary * 5/100 where salary > 80000 and salary < 85000;
+
+Create a new course  "CS-001", titled "Weekly Seminar", with 1 credits.
+-> desc course;
+   select * from course;
+   insert into course (course_id, title, dept_id, credits) values ('CS-001', 'Weekly Seminar', 1, 1);
+
+
+Create a section of the this course in fall 2017, with sec_id of 1, and with the location of this section not yet specified?
+-> insert into section (section_id, coure_id, sec_id, semester, year) values (8,'CS-001', 1, 'Fall',2017);
+
+To delete tuple:
+delete from table where condition;
+
+
+TO CREATE A SEQUENCE
+
+create sequence emp_seq start with 1 increment by 1;
+
+now create table:
+create table emp (emp_id int primary key, name varchar2(20), mobile int);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'xyz', 3214569875);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'abc', 7896541235);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'def', 1236985745);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'ghi', 9865741235);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'jkl', 7412589635);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'mno', 8756493215);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'pqr', 9874123655);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'stu', 9875632241);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'vwx', 1239658745);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'xyz1', 1287459693);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'xyz2', 8965321475);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'xyz3', 7896541236);
+insert into emp (emp_id, name, mobile) values (emp_seq.nextval, 'xyz4', 7896541236);
+
+
+to check the max values/input in emp of emp_id
+-> select max(emp_id) from seq;
+
+
+to drop the sequence
+-> drop sequence emp_seq;
+
+
+create sequence emp1 start with 14 increment by 1;
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'xyz', 3214569875);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'abc', 7896541235);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'def', 1236985745);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'ghi', 9865741235);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'jkl', 7412589635);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'mno', 8756493215);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'pqr', 9874123655);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'stu', 9875632241);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'vwx', 1239658745);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'xyz1', 1287459693);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'xyz2', 8965321475);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'xyz3', 7896541236);
+insert into emp (emp_id, name, mobile) values (emp1.nextval, 'xyz4', 7896541236);
+
+
+to rename the table : rename emp to employee;
+to rename the field : alter table employee rename column mobile to mobile_nbumber;
+
+
+
+truncate table employee;
+select * from employee;
+alter table employee add pin_code number not null;
