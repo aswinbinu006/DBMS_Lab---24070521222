@@ -1,0 +1,157 @@
+#System exception
+
+Employee not found
+
+
+CREATE OR REPLACE PROCEDURE get_employees_details(n IN NUMBER)
+AS
+    vname   employees.emp_name%TYPE;
+    vsalary employees.salary%TYPE;
+BEGIN
+    SELECT emp_name, salary
+    INTO vname, vsalary
+    FROM employees
+    WHERE emp_id = n;
+
+    dbms_output.put_line('Employee Name = ' || vname);
+    dbms_output.put_line('Employee Salary = ' || vsalary);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        dbms_output.put_line('Emp id not found.');
+END;
+/
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+    get_employees_details(10);
+END;
+/
+
+------------OUTPUT--------------
+Emp id not found.
+--------------------------------
+
+
+Max data found
+
+
+
+CREATE OR REPLACE PROCEDURE ndf (n IN NUMBER)
+AS
+    vname   employees.emp_name%TYPE;
+    vsalary employees.salary%TYPE;
+BEGIN
+    SELECT emp_name, salary
+    INTO vname, vsalary
+    FROM employees
+    WHERE dept_id = n;
+
+    DBMS_OUTPUT.PUT_LINE('Name = ' || vname || ', Salary = ' || vsalary);
+
+EXCEPTION
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('More than one employee found in dept = ' || n);
+
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No employee found in dept = ' || n);
+END;
+/
+
+SET SERVEROUTPUT ON;
+
+
+BEGIN
+    ndf(101);
+END;
+/
+
+-------------------OUTPUT-------------------
+More than one employee found in dept = 101
+--------------------------------------------
+
+
+
+
+
+
+#user defined exception
+
+when marks is between 0 to 100
+
+
+CREATE OR REPLACE PROCEDURE marks_details (m1 IN NUMBER, m2 IN NUMBER, m3 IN NUMBER)
+AS
+    Invalid_marks EXCEPTION;
+    total NUMBER;
+    avg_marks NUMBER;
+BEGIN
+    IF m1 < 0 OR m1 > 100 OR 
+       m2 < 0 OR m2 > 100 OR 
+       m3 < 0 OR m3 > 100 THEN
+        RAISE Invalid_marks;
+    END IF;
+
+    total := m1 + m2 + m3;
+    avg_marks := total / 3;
+
+    dbms_output.put_line('Total Marks = ' || total);
+    dbms_output.put_line('Average Marks = ' || avg_marks);
+
+EXCEPTION
+    WHEN Invalid_marks THEN
+        dbms_output.put_line('Marks must be between 0 and 100 only.');
+END;
+/
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+   marks_details(80, 10, 70);
+END;
+/
+
+------------------------Output----------------------------
+Total Marks = 160
+Average Marks = 53.33333333333333333333333333333333333333
+----------------------------------------------------------
+
+
+When marks is above 100 or below 0
+
+
+CREATE OR REPLACE PROCEDURE marks_details (m1 IN NUMBER, m2 IN NUMBER, m3 IN NUMBER)
+AS
+    Invalid_marks EXCEPTION;
+    total NUMBER;
+    avg_marks NUMBER;
+BEGIN
+    IF m1 < 0 OR m1 > 100 OR 
+       m2 < 0 OR m2 > 100 OR 
+       m3 < 0 OR m3 > 100 THEN
+        RAISE Invalid_marks;
+    END IF;
+
+    total := m1 + m2 + m3;
+    avg_marks := total / 3;
+
+    dbms_output.put_line('Total Marks = ' || total);
+    dbms_output.put_line('Average Marks = ' || avg_marks);
+
+EXCEPTION
+    WHEN Invalid_marks THEN
+        dbms_output.put_line('Marks must be between 0 and 100 only.');
+END;
+/
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+   marks_details(80, 101, 70);
+END;
+/
+
+----------------------OUTPUT-------------------------
+Marks must be between 0 and 100 only.
+-----------------------------------------------------

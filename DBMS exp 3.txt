@@ -1,0 +1,107 @@
+To display instructor from computer science department
+-> select * from instructor where dept_id = (select dept_id from department where name = 'Computer Science');
+
+USING JOIN
+-> select i.instructor_id, i.Name, i.salary, d.name from instructor i join department d on i.dept_id = d.dept_id where d.name = 'Computer Science';
+
+-> select avg(i.salary) as AVG_SAL from instructor i join department d on i.dept_id = d.dept_id where d.name = 'Computer Science' group by d.name;
+
+-> select d.name, avg(i.salary) as AVG_SAL from instructor i join department d on i.dept_id = d.dept_id where d.name = 'Computer Science' group by d.name;
+
+
+select * from department;
+
+select d.dept_id, d.name, avg(i.salary) as AVG_SAL from instructor i join department d on i.dept_id = d.dept_id group by d.dept_id, d.name;
+
+What is the total salary of all the teachers earning more than 30K?
+-> select sum(salary) as TOL_SAL from instructor where salary > 30000;
+
+
+
+CREATE TABLE STUDENT (
+    student_id NUMBER(38) PRIMARY KEY,
+    name       VARCHAR2(50) NOT NULL,
+    tot_cred   NUMBER(3)
+);
+
+INSERT INTO STUDENT VALUES (101, 'Arjun', 20);
+INSERT INTO STUDENT VALUES (102, 'Meera', 22);
+INSERT INTO STUDENT VALUES (106, 'Rahul', 18);
+INSERT INTO STUDENT VALUES (107, 'Sneha', 19);
+INSERT INTO STUDENT VALUES (108, 'Kiran', 21);
+
+CREATE TABLE ENROLLMENT (
+    enrollment_id INT PRIMARY KEY,
+    student_id INT NOT NULL,
+    section_id INT NOT NULL,
+    enrollment_date DATE,
+    status VARCHAR(20) DEFAULT 'ENROLLED',
+    FOREIGN KEY (student_id) REFERENCES STUDENT(student_id),
+    FOREIGN KEY (section_id) REFERENCES SECTION(section_id)
+);
+
+INSERT INTO ENROLLMENT VALUES (1, 101, 1, DATE '2024-07-01', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (2, 102, 1, DATE '2024-07-01', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (3, 101, 2, DATE '2024-07-02', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (4, 102, 2, DATE '2024-07-02', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (5, 106, 3, DATE '2024-07-03', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (6, 107, 4, DATE '2024-07-03', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (7, 108, 5, DATE '2024-07-04', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (8, 101, 6, DATE '2024-07-04', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (9, 102, 7, DATE '2024-07-05', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (10,106, 8, DATE '2024-07-05', 'ENROLLED');
+
+
+desc course;
+
+desc section;
+
+desc enrollment;
+
+select C.course_id,C.title, COUNT(E.student_id) as enrolled_students from COURSE C LEFT JOIN SECTION S ON C.course_id=S.course_id LEFT JOIN ENROLLMENT E ON S.section_id=E.section_id GROUP BY C.course_id, C.title ORDER BY C.course_id;
+
+
+select * from department where lower(name) like '%Sci%';
+
+select * from department where lower(name) like '%com%';
+select * from department where lower(name) like '%Science%';
+select * from department where lower(name) like 'Computer Science';
+
+
+alter table instructor add hiredate date;
+
+update instructor set hiredate = date '2021-06-09' where instructor_id=1;
+update instructor set hiredate = date '2024-02-22' where instructor_id=2;
+update instructor set hiredate = date '2025-11-07' where instructor_id=3;
+update instructor set hiredate = date '2021-01-22' where instructor_id=4;
+update instructor set hiredate = date '2021-05-02' where instructor_id=5;
+update instructor set hiredate = date '2025-11-12' where instructor_id=6;
+update instructor set hiredate = date '2026-01-22' where instructor_id=7;
+
+
+
+select * from instructor where hiredate > add_months(sydat, -60);
+
+display the list of instructor who have joined after 1 jan 2021 or before 30 jun 2022
+-> select * from instructor where hiredate > date '2021-01-01' and hiredate < date '2022-06-30';
+
+displaye name of those instructor who are going to retire 01 jan 2024 if the maximum job period is 3 years
+-> select * from instructor where hiredate > date '2021-01-01' and hiredate < add_months(sysdate, -36);
+
+display those instructor whose salary contains at least 4 digits and salary above 75 thousand.
+-> select name, salary from instructor where salary >= 75000 and length(salary) >= 4;
+
+-> update instructor set salary = 350 where instructor_id=2;
+
+
+select name, case when salary < 60000 then 'less salary' when salary > 60000 then 'More salary' end as salary_category from instructor;
+
+select i.name || '=>' || d.name from instructor i join  department d on i.dept_id=d.dept_id;
+
+select d.name,count(i.name) from instructor i join department d on i.dept_id=d.dept_id group by d.name;
+
+select name,dept_id,salary from instructor;
+
+update instructor set salary = 70000 where name='Frank Miller';
+
+select i.name,  i.salary from instructor i where i.salary>=(select i2.salary from instructor i2 join department d on i2.dept_id = d.dept_id where d.name='Biology');

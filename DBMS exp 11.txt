@@ -1,0 +1,18 @@
+create function Square2(n in number) return number
+as
+sq number := 0;
+begin
+	sq := n*n;
+	return sq;
+end;
+/
+
+SET SERVEROUTPUT ON;
+
+select Square2(10) from dual;
+
+--------------Output---------------
+SQUARE2(10)
+-----------
+        100
+-----------------------------------

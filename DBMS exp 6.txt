@@ -1,0 +1,161 @@
+set serveroutput ON
+
+-> Create procedure Hello1
+as
+Begin
+DBMS_OUTPUT.PUT_line('Hello World');
+END;
+/
+
+# hello world program using procedures 
+-> create procedure hello_world
+AS
+Begin
+      DBMS_OUTPUT.PUT_LINE('Hello World');
+END;
+/
+
+#Now to execute above program
+-> EXEC hello_world
+-> execute hello_world;
+
+#Add 'welcome to sit' after 'Hello World'
+->create or replace procedure hello_world
+AS
+Begin
+      DBMS_OUTPUT.PUT_LINE('Hello World, Welcome to SIT');
+END;
+/
+
+
+#taking your own input and adding
+CREATE OR REPLACE PROCEDURE add_numbers
+(    num1 IN number, num2 IN number)
+as
+BEGIN 
+    DBMS_OUTPUT.PUT_LINE('Result : ' || (num1+num2) );
+END;
+/
+
+#adding two numbers
+CREATE OR REPLACE PROCEDURE add_numbers
+    AS
+        num1 number := 5;
+        num2 number := 10;
+        res number;
+    BEGIN
+        res:= NUM1 + NUM2;
+        DBMS_OUTPUT.PUT_LINE('result: ' || res);
+    END;
+   /
+ 
+
+
+
+create or replace procedure add1 
+AS
+ a number;
+ b number;
+Begin 
+a:=5;
+b:=10;
+DBMS_output.put_line('Result:'|| (a+b));
+End;
+/
+
+
+
+create or replace procedure add2
+(
+ a IN number,
+ b IN number)
+as
+Begin 
+DBMS_output.put_line('Result:'|| (a+b));
+End;
+/
+--> Execute add2(5, 10);
+
+
+
+
+create or replace procedure add3
+(
+ a IN number,
+ b IN number,
+ c out number)
+as
+Begin 
+c:= (a + b);
+DBMS_output.put_line('Result:' || c);
+End;
+/
+-->variable c1 number;
+-->Exec add3(5,10,:c1);
+
+
+
+create or replace procedure swap_no
+(
+a in out number,
+b in out number
+)
+as
+begin
+
+a := a+b;
+b := a-b;
+a := a-b;
+DBMS_output.put_line('After Swapping:');
+DBMS_output.put_line('A = ' || a);
+DBMS_output.put_line('B = ' || b);
+END;
+/
+
+----EXECUTION--------
+variable a number;
+exec:a:=5;
+
+variable b number;
+exec:b:=10;
+
+exec swap_no(:a,:b);
+---------------------
+
+
+
+
+create or replace procedure largest_no
+(
+    a in number,
+    b in number,
+    c in number
+)
+as
+begin
+    if a > b and a > c then
+        DBMS_output.put_line('A = ' || a);
+
+    elsif b > a and b > c then
+        DBMS_output.put_line('B = ' || b);
+
+    else
+        DBMS_output.put_line('C = ' || c);
+	end if;
+end;
+/
+
+-----EXECUTION-----
+variable a number;
+exec :a := 15;
+
+variable b number;
+exec :b := 25;
+
+variable c number;
+exec :c := 10;
+
+exec largest_no(:a,:b,:c);
+-------------------
+
+
