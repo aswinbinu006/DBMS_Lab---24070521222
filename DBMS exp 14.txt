@@ -1,0 +1,90 @@
+1.CREATE TABLE EMP2 WITH ATTRIBUTES EMPNO AS INTEGER TYPE, NAME AS STRING AND CATEGORY AS INTEGER TYPE
+
+SQL> create table emp2(
+  2  empno INT,
+  3  name varchar(20),
+  4  category INT);
+
+Table created.
+
+2.DESIGN TRIGGER SUCH THAT STRING VALUES SHOULD BE INSERTED or updated as uppercase only EXAMPLE STRING=UPPER(STRING)
+
+
+SQL> create or replace trigger trg_uppercase
+  2  before insert or update on emp2
+  3  for each row
+  4  begin
+  5  :New.name:=upper(:NEW.name);
+  6  end;
+  7  /
+
+Trigger created.
+
+SQL> insert into emp2 values(101,'ash',1);
+1 row created.
+SQL> INSERT INTO EMP2 VALUES(102,'arnav',2);
+1 row created.
+
+SQL> SELECT * FROM EMP2;
+
+     EMPNO NAME                   CATEGORY
+---------- -------------------- ----------
+       101 ASH                           1
+       102 ARNAV                         2
+
+3.ADD NEW ATTRIBUTE SALARY WITH PROPER DATATYPE TO THE ABOVE TABLE
+SQL> alter table emp2 add salary number(7,2);
+Table altered.
+
+SQL> desc emp2;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(38)
+ NAME                                               VARCHAR2(20)
+ CATEGORY                                           NUMBER(38)
+ SALARY                                             NUMBER(7,2)
+
+4.DESIGN A TRIGGER WHICH WILL BE FIRED WHEN A NEW RECORD IS INSERTED OR UPDATE FOR THE CONDITIONS:
+A.SALARY SHOULD BE MORE THAN 10000 FOR CATEGORY 1
+B.SALARY SHOULD BE MORE THAN 20000 FOR CATEGORY 2
+C.SALARY SHOULD BE MORE THAN 30000 FOR CATEGORY 3
+
+CREATE OR REPLACE TRIGGER TRG_SAL
+BEFORE INSERT OR UPDATE ON EMP2
+FOR EACH ROW
+BEGIN
+ IF :NEW.category=1 and :NEW.salary<10000 then
+    RAISE_APPLICATION_ERROR(-20001,'ENTER SALARY MORE THAN 10000 FRO CATEGORY 1');
+ ELSIF :NEW.category=2 and :NEW.salary<20000 then
+    RAISE_APPLICATION_ERROR(-20001,'ENTER SALARY MORE THAN 20000 FRO CATEGORY 2');
+ ELSIF :NEW.category=3 and :NEW.salary<30000 then
+    RAISE_APPLICATION_ERROR(-20001,'ENTER SALARY MORE THAN 30000 FRO CATEGORY 3');
+ END IF;
+END;
+/
+
+Trigger created.
+     
+    
+SQL> insert into emp2 values(103,'Aster',3,30000);
+1 row created.
+
+SQL> insert into emp2 values(103,'Aster',3,20000);
+insert into emp2 values(103,'Aster',3,20000)
+            *
+ERROR at line 1:
+ORA-20001: ENTER SALARY MORE THAN 30000 FRO CATEGORY 3
+ORA-06512: at "D1.TRG_SAL", line 7
+ORA-04088: error during execution of trigger 'D1.TRG_SAL'
+
+    
+SQL> insert into emp2 values(103,'Aster',2,12000);
+insert into emp2 values(103,'Aster',2,12000)
+            *
+ERROR at line 1:
+ORA-20001: ENTER SALARY MORE THAN 20000 FRO CATEGORY 2
+ORA-06512: at "D1.TRG_SAL", line 5
+ORA-04088: error during execution of trigger 'D1.TRG_SAL'
+
+
+

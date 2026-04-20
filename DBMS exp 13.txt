@@ -1,0 +1,188 @@
+EXPERIMENT 13 - TRIGGERS
+
+SQL> select * from st_info;
+
+      ROLL NAME                                 SUB1       SUB2       SUB3       SUB4      TOTAL       PERC RESULT
+---------- ------------------------------ ---------- ---------- ---------- ---------- ---------- ---------- ----------
+         1 Amit                                   75         68         70         80        293      73.25 PASS
+         2 Rahul                                  60         65         58         72
+         3 Priya                                  82         78         85         80
+         4 Neha                                   55         60         62         58
+         5 Rohit                                  45         50         48         52
+         6 Anita                                  90         88         92         85
+         7 Karan                                  70         72         68         75
+         8 Sneha                                  65         60         67         63
+         9 Vikas                                  50         55         60         58
+        10 Pooja                                  78         82         80         76
+
+10 rows selected.
+
+------------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE TRIGGER TRI_UPD
+ AFTER UPDATE ON ST_INFO
+ BEGIN
+    DBMS_OUTPUT.PUT_LINE('THIS IS STATEMENT LEVEL TRIGGER FIRED');
+ END;
+/
+
+Trigger created.
+
+SQL> update st_info set sub1=sub1-10;
+THIS IS STATEMENT LEVEL TRIGGER FIRED
+
+10 rows updated.
+
+SQL> select * from st_info;
+
+      ROLL NAME                                 SUB1       SUB2       SUB3       SUB4      TOTAL       PERC RESULT
+---------- ------------------------------ ---------- ---------- ---------- ---------- ---------- ---------- ----------
+         1 Amit                                   65         68         70         80        293      73.25 PASS
+         2 Rahul                                  50         65         58         72
+         3 Priya                                  72         78         85         80
+         4 Neha                                   45         60         62         58
+         5 Rohit                                  35         50         48         52
+         6 Anita                                  80         88         92         85
+         7 Karan                                  60         72         68         75
+         8 Sneha                                  55         60         67         63
+         9 Vikas                                  40         55         60         58
+        10 Pooja                                  68         82         80         76
+
+10 rows selected.
+
+--------------------------------------------------------------------------------------------------------
+SQL> CREATE OR REPLACE TRIGGER TRI_UPD1
+  2   AFTER UPDATE ON ST_INFO FOR EACH ROW
+  3   BEGIN
+  4      DBMS_OUTPUT.PUT_LINE('THIS IS ROW LEVEL TRIGGER FIRED');
+  5   END;
+  6  /
+
+Trigger created.
+
+SQL> update st_info set sub1=sub1+10;
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS STATEMENT LEVEL TRIGGER FIRED
+
+10 rows updated.
+
+SQL> SELECT * FROM ST_INFO;
+
+      ROLL NAME                                 SUB1       SUB2       SUB3       SUB4      TOTAL       PERC RESULT
+---------- ------------------------------ ---------- ---------- ---------- ---------- ---------- ---------- ----------
+         1 Amit                                   75         68         70         80        293      73.25 PASS
+         2 Rahul                                  60         65         58         72
+         3 Priya                                  82         78         85         80
+         4 Neha                                   55         60         62         58
+         5 Rohit                                  45         50         48         52
+         6 Anita                                  90         88         92         85
+         7 Karan                                  70         72         68         75
+         8 Sneha                                  65         60         67         63
+         9 Vikas                                  50         55         60         58
+        10 Pooja                                  78         82         80         76
+
+10 rows selected.
+
+SQL> update st_info set sub1=sub1-10 WHERE SUB1>80;
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS ROW LEVEL TRIGGER FIRED
+THIS IS STATEMENT LEVEL TRIGGER FIRED
+2 rows updated.
+
+SQL> SELECT * FROM ST_INFO;
+
+      ROLL NAME                                 SUB1       SUB2       SUB3       SUB4      TOTAL       PERC RESULT
+---------- ------------------------------ ---------- ---------- ---------- ---------- ---------- ---------- ----------
+         1 Amit                                   75         68         70         80        293      73.25 PASS
+         2 Rahul                                  60         65         58         72
+         3 Priya                                  72         78         85         80
+         4 Neha                                   55         60         62         58
+         5 Rohit                                  45         50         48         52
+         6 Anita                                  80         88         92         85
+         7 Karan                                  70         72         68         75
+         8 Sneha                                  65         60         67         63
+         9 Vikas                                  50         55         60         58
+        10 Pooja                                  78         82         80         76
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE TRIGGER TRI_INS
+ AFTER INSERT ON ST_INFO 
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('1 ROW CREATED');
+END;
+/
+ 
+Trigger created.
+
+SQL> INSERT INTO ST_INFO(ROLL,NAME) VALUES(11,'Nikk');
+1 ROW CREATED
+1 row created.
+
+
+SQL> SELECT * FROM ST_INFO;
+
+      ROLL NAME                                 SUB1       SUB2       SUB3       SUB4      TOTAL       PERC RESULT
+---------- ------------------------------ ---------- ---------- ---------- ---------- ---------- ---------- ----------
+         1 Amit                                   75         68         70         80        293      73.25 PASS
+         2 Rahul                                  60         65         58         72
+         3 Priya                                  72         78         85         80
+         4 Neha                                   55         60         62         58
+         5 Rohit                                  45         50         48         52
+         6 Anita                                  80         88         92         85
+         7 Karan                                  70         72         68         75
+         8 Sneha                                  65         60         67         63
+         9 Vikas                                  50         55         60         58
+        10 Pooja                                  78         82         80         76
+        11 Nikk
+
+11 rows selected.
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+CREATE A TRIGGER FOR IF MARKS INSERTION HAVE A WRONG VALUE IT TRIGGERS
+
+SQL> CREATE OR REPLACE TRIGGER C_TRI_INS
+  2   BEFORE INSERT ON ST_INFO for each row
+  3  BEGIN
+  4    IF :NEW.SUB1<0 OR :NEW.SUB1>100 THEN
+  5       RAISE_APPLICATION_ERROR(-20001,'MARKS NOT IN RANGE');
+  6    END IF;
+  7  END;
+  8  /
+
+Trigger created.
+
+Insert into st_info(ROLL,NAME,SUB1) VALUES(12,'ANU',-56)
+            *
+ERROR at line 1:
+ORA-20001: MARKS NOT IN RANGE
+ORA-06512: at "D1.C_TRI_INS", line 3
+ORA-04088: error during execution of trigger 'D1.C_TRI_INS'
+
+
+SQL> Insert into st_info(ROLL,NAME,SUB1) VALUES(12,'ANU',56);
+
+1 row created.
+
+SQL> Insert into st_info(ROLL,NAME,SUB1) VALUES(13,'ANU',156);
+Insert into st_info(ROLL,NAME,SUB1) VALUES(13,'ANU',156)
+            *
+ERROR at line 1:
+ORA-20001: MARKS NOT IN RANGE
+ORA-06512: at "D1.C_TRI_INS", line 3
+ORA-04088: error during execution of trigger 'D1.C_TRI_INS'
+
+
+SQL> Insert into st_info(ROLL,NAME,SUB1) VALUES(13,'ANU',66);
+
+1 row created.
